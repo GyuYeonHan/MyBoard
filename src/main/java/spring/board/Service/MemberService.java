@@ -2,6 +2,7 @@ package spring.board.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.board.Repository.MemberRepository;
 import spring.board.domain.Member;
 
@@ -15,7 +16,9 @@ public class MemberService {
         this.memberRepository = memberRepository;
     }
 
+    @Transactional
     public Long join(Member member) {
-
+        memberRepository.save(member);
+        return member.getId();
     }
 }

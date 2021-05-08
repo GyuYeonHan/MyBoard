@@ -1,6 +1,7 @@
 package spring.board.Repository;
 
 import org.springframework.stereotype.Repository;
+import spring.board.domain.Comment;
 import spring.board.domain.Writing;
 
 import javax.persistence.EntityManager;
@@ -12,11 +13,19 @@ public class CommentRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(Writing writing) {
-        if (writing.getId() == null) {
-            em.persist(writing);
+    public void save(Comment comment) {
+        if (comment.getId() == null) {
+            em.persist(comment);
         } else {
-            em.merge(writing);
+            em.merge(comment);
         }
+    }
+
+    public Comment findOne(Long id) {
+        return em.find(Comment.class, id);
+    }
+
+    public void delete(Comment comment) {
+        em.remove(comment);
     }
 }

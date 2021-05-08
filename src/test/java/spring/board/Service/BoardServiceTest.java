@@ -30,10 +30,10 @@ class BoardServiceTest {
         writing.setContent("이것은 테스트입니다.");
 
         //when
-        Long writedId = boardService.write(writing);
+        Long id = boardService.write(writing);
 
         //then
-        Assertions.assertThat(writing).isEqualTo(boardRepository.findOne(writedId));
+        Assertions.assertThat(writing).isEqualTo(boardRepository.findOne(id));
     }
 
     @Test
@@ -44,15 +44,14 @@ class BoardServiceTest {
         writing.setCreatedTime(LocalDateTime.now());
         writing.setHeader("테스트");
         writing.setContent("이것은 테스트입니다.");
-        Long writedId = boardService.write(writing);
-
-        writing.setContent("변경된 내용입니다.");
+        Long id = boardService.write(writing);
 
         //when
+        writing.setContent("변경된 내용입니다.");
         boardService.modify(writing);
 
         //then
-        Assertions.assertThat(boardRepository.findOne((writedId)).getContent()).isEqualTo("변경된 내용입니다.");
+        Assertions.assertThat(boardRepository.findOne((id)).getContent()).isEqualTo("변경된 내용입니다.");
     }
 
     @Test
@@ -63,15 +62,15 @@ class BoardServiceTest {
         writing.setCreatedTime(LocalDateTime.now());
         writing.setHeader("테스트");
         writing.setContent("이것은 테스트입니다.");
-        Long writedId = boardService.write(writing);
+        Long id = boardService.write(writing);
 
-        Writing findWriting = boardRepository.findOne((writedId));
+        Writing findWriting = boardRepository.findOne((id));
 
         //when
         boardService.delete(findWriting);
 
         //then
-        Assertions.assertThat(boardRepository.findOne(writedId)).isNull();
+        Assertions.assertThat(boardRepository.findOne(id)).isNull();
     }
 
     @Test
