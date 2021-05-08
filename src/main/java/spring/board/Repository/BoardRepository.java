@@ -14,7 +14,11 @@ public class BoardRepository {
     private EntityManager em;
 
     public void save(Writing writing) {
-        em.persist(writing);
+        if (writing.getId() == null) {
+            em.persist(writing);
+        } else {
+            em.merge(writing);
+        }
     }
 
     public Writing findOne(Long id) {
@@ -30,5 +34,9 @@ public class BoardRepository {
         return em.createQuery("select w from Writing w where w.member.name = :name", Writing.class)
                 .setParameter("name", name)
                 .getResultList();
+    }
+
+    public void delete(Writing writing) {
+        em.remove(writing);
     }
 }

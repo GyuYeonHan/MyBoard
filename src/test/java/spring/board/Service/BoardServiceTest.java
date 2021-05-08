@@ -37,7 +37,7 @@ class BoardServiceTest {
     }
 
     @Test
-    void 수정() {
+    void 글수정() {
         //given
         Writing writing = new Writing();
         writing.setCategory(Category.ETC);
@@ -46,27 +46,32 @@ class BoardServiceTest {
         writing.setContent("이것은 테스트입니다.");
         Long writedId = boardService.write(writing);
 
-        //when
+        writing.setContent("변경된 내용입니다.");
 
+        //when
+        boardService.modify(writing);
 
         //then
-        Assertions.assertThat(writing).isEqualTo(boardRepository.findOne(writedId));
+        Assertions.assertThat(boardRepository.findOne((writedId)).getContent()).isEqualTo("변경된 내용입니다.");
     }
 
     @Test
-    void 지우기() {
+    void 글삭제() {
         //given
         Writing writing = new Writing();
         writing.setCategory(Category.ETC);
         writing.setCreatedTime(LocalDateTime.now());
         writing.setHeader("테스트");
         writing.setContent("이것은 테스트입니다.");
-
-        //when
         Long writedId = boardService.write(writing);
 
+        Writing findWriting = boardRepository.findOne((writedId));
+
+        //when
+        boardService.delete(findWriting);
+
         //then
-        Assertions.assertThat(writing).isEqualTo(boardRepository.findOne(writedId));
+        Assertions.assertThat(boardRepository.findOne(writedId)).isNull();
     }
 
     @Test

@@ -31,9 +31,8 @@ public class BoardService {
     }
 
     @Transactional
-    public Long delete(Writing writing) {
-        boardRepository.save(writing);
-        return writing.getId();
+    public void delete(Writing writing) {
+        boardRepository.delete(writing);
     }
 
     public List<Writing> findWritingByName(String name) {
