@@ -1,5 +1,5 @@
 package spring.board.domain;
 
 public enum Category {
-    Tech, Economy, ETC
+    기술, 경제, 기타
 }
