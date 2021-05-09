@@ -24,9 +24,7 @@ class CommentServiceTest {
                 .content("이것은 테스트입니다.")
                 .build();
 
-        Comment comment = new Comment();
-        comment.setContent("테스트 댓글입니다.");
-        comment.setPost(post);
+        Comment comment = Comment.builder().content("테스트 댓글입니다.").post(post).build();
 
         //when
         Long id = commentService.write(comment);
@@ -43,9 +41,7 @@ class CommentServiceTest {
                 .content("이것은 테스트입니다.")
                 .build();
 
-        Comment comment = new Comment();
-        comment.setContent("테스트 댓글입니다.");
-        comment.setPost(post);
+        Comment comment = Comment.builder().content("테스트 댓글입니다.").post(post).build();
         Long id = commentService.write(comment);
 
         //when
@@ -65,9 +61,7 @@ class CommentServiceTest {
                 .content("이것은 테스트입니다.")
                 .build();
 
-        Comment comment = new Comment();
-        comment.setContent("테스트 댓글입니다.");
-        comment.setPost(post);
+        Comment comment = Comment.builder().content("테스트 댓글입니다.").post(post).build();
         Long id = commentService.write(comment);
 
         //when

@@ -1,14 +1,14 @@
 package spring.board.domain;
 
 import lombok.*;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Getter
-public class Post {
+public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long id;
@@ -19,8 +19,6 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
     private int viewCount = 0;
-    private String createdTime;
-    private String lastModifiedTime;
 
     @Enumerated(EnumType.STRING)
     private Category category;
@@ -33,16 +31,19 @@ public class Post {
     private List<Comment> comments;
 
     @Builder
-    public Post(Long id, String title, String content, int viewCount, String createdTime, String lastModifiedTime, Category category, Member member, List<Comment> comments) {
+    public Post(String createdTime, String modifiedTime, Long id, String title, String content, int viewCount, Category category, Member member, List<Comment> comments) {
+        super(createdTime, modifiedTime);
         this.id = id;
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
-        this.createdTime = createdTime;
-        this.lastModifiedTime = lastModifiedTime;
         this.category = category;
         this.member = member;
         this.comments = comments;
+    }
+
+    protected Post() {
+        super();
     }
 
     public void setTitle(String title) {

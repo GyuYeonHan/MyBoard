@@ -22,7 +22,7 @@
                     <td th:text="${post.category}"></td>
                     <td><a href="viewPost.html" th:href="@{/board/{postId}(postId=${post.id})}" th:text="${post.title}"></a></td>
                     <td th:text="${post.member.name}"></td>
-                    <td th:text="${post.lastModifiedTime}"></td>
+                    <td th:text="${post.modifiedTime}"></td>
                     <td th:text="${post.viewCount}"></td>
                 </tr>
             </tbody>

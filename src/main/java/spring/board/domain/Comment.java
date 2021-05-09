@@ -1,13 +1,12 @@
 package spring.board.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
-public class Comment {
+@Getter
+public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue
     private Long id;
@@ -21,6 +20,25 @@ public class Comment {
     private Member member;
 
     private String content;
-    private String createdTime;
-    private String lastModifiedTime;
+
+    @Builder
+    public Comment(String createdTime, String modifiedTime, Long id, Post post, Member member, String content) {
+        super(createdTime, modifiedTime);
+        this.id = id;
+        this.post = post;
+        this.member = member;
+        this.content = content;
+    }
+
+    protected Comment() {
+        super();
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 }

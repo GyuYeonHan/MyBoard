@@ -74,7 +74,7 @@ public class BoardController {
                 .title(form.getTitle())
                 .category(form.getCategory())
                 .createdTime(post.getCreatedTime())
-                .lastModifiedTime(getNowLocalDateTimeFormat(LocalDateTime.now()))
+                .modifiedTime(getNowLocalDateTimeFormat(LocalDateTime.now()))
                 .member(post.getMember())
                 .build();
 
@@ -135,7 +135,7 @@ public class BoardController {
                 .title(form.getTitle())
                 .category(form.getCategory())
                 .createdTime(nowString)
-                .lastModifiedTime(nowString)
+                .modifiedTime(nowString)
                 .member(memberService.find(1L))
                 .build();
 
@@ -143,12 +143,13 @@ public class BoardController {
     }
 
     public Comment createComment(Post post, CommentForm form) {
-        Comment comment = new Comment();
-        comment.setContent(form.getContent());
         String nowString = getNowLocalDateTimeFormat(LocalDateTime.now());
-        comment.setCreatedTime(nowString);
-        comment.setLastModifiedTime(nowString);
-        comment.setMember(memberService.find(1L));
+        Comment comment = Comment.builder()
+                .content(form.getContent())
+                .createdTime(nowString)
+                .modifiedTime(nowString)
+                .member(memberService.find(1L))
+                .build();
         post.addComment(comment);
 
         return comment;
