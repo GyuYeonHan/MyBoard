@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import spring.board.Service.BoardService;
+import spring.board.Service.CommentService;
 import spring.board.Service.MemberService;
+import spring.board.domain.Comment;
 import spring.board.domain.Writing;
 
 import javax.validation.Valid;
@@ -23,6 +25,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final MemberService memberService;
+    private final CommentService commentService;
 
     @GetMapping
     public String boardMain(Model model) {
@@ -32,13 +35,13 @@ public class BoardController {
     }
 
     @GetMapping("/create")
-    public String createForm(Model model) {
+    public String createWritingForm(Model model) {
         model.addAttribute("writingForm", new WritingForm());
         return "board/writingCreateForm";
     }
 
     @PostMapping("/create")
-    public String create(@Valid WritingForm form, BindingResult result) {
+    public String createWriting(@Valid WritingForm form, BindingResult result) {
         if (result.hasErrors()) {
             return "board/writingCreateForm";
         }
@@ -50,7 +53,7 @@ public class BoardController {
     }
 
     @GetMapping("/{writingId}/modify")
-    public String modifyForm(@PathVariable Long writingId, Model model) {
+    public String modifyWritingForm(@PathVariable Long writingId, Model model) {
         Writing writing = boardService.findOne(writingId);
         model.addAttribute("writingForm", new WritingForm());
         model.addAttribute("writing", writing);
@@ -58,7 +61,7 @@ public class BoardController {
     }
 
     @PostMapping("/{writingId}/modify")
-    public String modify(@PathVariable Long writingId, @Valid WritingForm form, BindingResult result) {
+    public String modifyWriting(@PathVariable Long writingId, @Valid WritingForm form, BindingResult result) {
         if (result.hasErrors()) {
             return "board/writingModifyForm";
         }
@@ -80,14 +83,44 @@ public class BoardController {
         writing.setViewCount(writing.getViewCount()+1);
         boardService.modify(writing);
         model.addAttribute("writing", writing);
+
+        List<Comment> comments = commentService.findAllCommentsofWriting(writing);
+        model.addAttribute("comments", comments);
+        model.addAttribute("commentForm", new CommentForm());
         return "board/viewWriting";
     }
 
+    @PostMapping("/{writingId}")
+    public String createComment(@PathVariable Long writingId, @Valid CommentForm form, BindingResult result) {
+        if (result.hasErrors()) {
+            return "redirect:/board/{writingId}";
+        }
+
+        Writing writing = boardService.findOne(writingId);
+        Comment comment = createComment(writing, form);
+        commentService.write(comment);
+
+        return "redirect:/board/{writingId}";
+    }
+
     @GetMapping("/{writingId}/delete")
-    public String delete(@PathVariable Long writingId) {
+    public String deleteWriting(@PathVariable Long writingId) {
         Writing writing = boardService.findOne(writingId);
         boardService.delete(writing);
+
+        List<Comment> comments = commentService.findAllCommentsofWriting(writing);
+        for (Comment comment : comments) {
+            commentService.delete(comment);
+        }
+
         return "redirect:/board";
+    }
+
+    @GetMapping("/{writingId}/comment/{commentId}/delete")
+    public String deleteComment(@PathVariable Long writingId, @PathVariable Long commentId) {
+        Comment comment = commentService.findOne(commentId);
+        commentService.delete(comment);
+        return "redirect:/board/{writingId}";
     }
 
     public Writing createWriting(WritingForm form) {
@@ -101,6 +134,18 @@ public class BoardController {
         writing.setMember(memberService.find(1L));
 
         return writing;
+    }
+
+    public Comment createComment(Writing writing, CommentForm form) {
+        Comment comment = new Comment();
+        comment.setContent(form.getContent());
+        String nowString = getNowLocalDateTimeFormat(LocalDateTime.now());
+        comment.setCreatedTime(nowString);
+        comment.setLastModifiedTime(nowString);
+        comment.setMember(memberService.find(1L));
+        comment.setWriting(writing);
+
+        return comment;
     }
 
     private String getNowLocalDateTimeFormat(LocalDateTime localDateTime) {

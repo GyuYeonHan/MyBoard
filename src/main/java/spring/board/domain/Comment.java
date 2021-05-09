@@ -16,6 +16,11 @@ public class Comment {
     @JoinColumn(name = "writing_id")
     private Writing writing;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     private String content;
-    private String time;
+    private String createdTime;
+    private String lastModifiedTime;
 }

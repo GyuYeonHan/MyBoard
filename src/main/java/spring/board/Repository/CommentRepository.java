@@ -6,6 +6,7 @@ import spring.board.domain.Writing;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
 
 @Repository
 public class CommentRepository {
@@ -23,6 +24,12 @@ public class CommentRepository {
 
     public Comment findOne(Long id) {
         return em.find(Comment.class, id);
+    }
+
+    public List<Comment> findByWriting(Long writingId) {
+        return em.createQuery("select c from Comment c where c.writing.id = :id", Comment.class)
+                .setParameter("id", writingId)
+                .getResultList();
     }
 
     public void delete(Comment comment) {

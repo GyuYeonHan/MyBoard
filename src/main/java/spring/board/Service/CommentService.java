@@ -6,6 +6,8 @@ import spring.board.Repository.CommentRepository;
 import spring.board.domain.Comment;
 import spring.board.domain.Writing;
 
+import java.util.List;
+
 @Service
 public class CommentService {
 
@@ -25,6 +27,14 @@ public class CommentService {
     public Long modify(Comment comment) {
         commentRepository.save(comment);
         return comment.getId();
+    }
+
+    public Comment findOne(Long id) {
+        return commentRepository.findOne(id);
+    }
+
+    public List<Comment> findAllCommentsofWriting(Writing writing) {
+        return commentRepository.findByWriting(writing.getId());
     }
 
     @Transactional

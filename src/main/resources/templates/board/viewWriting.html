@@ -3,7 +3,7 @@
 <head th:replace="fragments/header :: header"/>
 <body>
 <div class="container">
-  <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
     <button class="btn btn-primary"
             th:onclick="|location.href='@{/board/{writingId}/modify(writingId=${writing.id})}'|"
             type="button">글 수정
@@ -12,14 +12,47 @@
             th:onclick="|location.href='@{/board/{writingId}/delete(writingId=${writing.id})}'|"
             type="button">글 삭제
     </button>
-  <div class="">
-    <dl>
-      <dt th:text="${writing.header}"></dt>
-      <dd th:text="${writing.content}"></dd>
-    </dl>
-  </div>
-
-  <div th:replace="fragments/footer :: footer"/>
+    <div class="container-fluid">
+        <dl>
+            <dt th:text="${writing.header}"></dt>
+            <dd th:text="${writing.content}"></dd>
+        </dl>
+    </div>
+    <hr>
+    <div class="">
+        <p th:text="|댓글 (${comments.size()})|"></p>
+        <div>
+            <form role="form" th:action="@{/board/{writingId}(writingId=${writing.id})}" th:object="${commentForm}"
+                  method="post">
+                <div class="">
+                    <label th:for="content">댓글 쓰기</label>
+                    <input type="text" name="content" th:field="*{content}" class="form-control">
+                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></p>
+                </div>
+                <button type="submit" class="btn btn-primary">작성</button>
+            </form>
+        </div>
+        <table class="table-borderless">
+            <thead>
+            <tr>
+                <th>작성자</th>
+                <th>내용</th>
+                <th>날짜</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="comment : ${comments}">
+                <td th:text="${comment.member.name}"></td>
+                <td th:text="${comment.content}"></td>
+                <td th:text="${comment.lastModifiedTime}"></td>
+                <td>
+                    <a th:href="@{/board/{writingId}/comment/{commentId}/delete(writingId=${writing.id},commentId=${comment.id})}">삭제</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
 </div>
 </body>
 </html>
