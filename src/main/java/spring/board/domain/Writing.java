@@ -17,8 +17,8 @@ public class Writing {
     private String header;
     private String content;
     private int viewCount = 0;
-    private LocalDateTime createdTime;
-    private LocalDateTime lastModifiedTime;
+    private String createdTime;
+    private String lastModifiedTime;
 
     @Enumerated(EnumType.STRING)
     private Category category;

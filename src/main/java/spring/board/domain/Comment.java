@@ -17,4 +17,5 @@ public class Comment {
     private Writing writing;
 
     private String content;
+    private String time;
 }

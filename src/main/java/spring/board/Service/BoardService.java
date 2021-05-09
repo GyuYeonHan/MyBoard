@@ -35,6 +35,14 @@ public class BoardService {
         boardRepository.delete(writing);
     }
 
+    public List<Writing> findAllWritings() {
+        return boardRepository.findAll();
+    }
+
+    public Writing findOne(Long id) {
+        return boardRepository.findOne(id);
+    }
+
     public List<Writing> findWritingByName(String name) {
         return boardRepository.findByName(name);
     }

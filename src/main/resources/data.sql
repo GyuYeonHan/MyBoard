@@ -1,0 +1,1 @@
+INSERT INTO MEMBER VALUES (1,'한규연');
