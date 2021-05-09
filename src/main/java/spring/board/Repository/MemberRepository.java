@@ -2,7 +2,6 @@ package spring.board.Repository;
 
 import org.springframework.stereotype.Repository;
 import spring.board.domain.Member;
-import spring.board.domain.Writing;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

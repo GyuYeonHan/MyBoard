@@ -10,7 +10,7 @@ import spring.board.Service.BoardService;
 import spring.board.Service.CommentService;
 import spring.board.Service.MemberService;
 import spring.board.domain.Comment;
-import spring.board.domain.Writing;
+import spring.board.domain.Post;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
@@ -29,121 +29,127 @@ public class BoardController {
 
     @GetMapping
     public String boardMain(Model model) {
-        List<Writing> writings = boardService.findAllWritings();
-        model.addAttribute("writings", writings);
+        List<Post> posts = boardService.findAllPosts();
+        model.addAttribute("posts", posts);
         return "board/board";
     }
 
     @GetMapping("/create")
-    public String createWritingForm(Model model) {
-        model.addAttribute("writingForm", new WritingForm());
-        return "board/writingCreateForm";
+    public String createPostForm(Model model) {
+        model.addAttribute("postForm", new PostForm());
+        return "board/postCreateForm";
     }
 
     @PostMapping("/create")
-    public String createWriting(@Valid WritingForm form, BindingResult result) {
+    public String writePost(@Valid PostForm form, BindingResult result) {
         if (result.hasErrors()) {
-            return "board/writingCreateForm";
+            return "board/postCreateForm";
         }
 
-        Writing writing = createWriting(form);
-        boardService.write(writing);
+        Post post = createPost(form);
+        boardService.write(post);
 
         return "redirect:/board";
     }
 
-    @GetMapping("/{writingId}/modify")
-    public String modifyWritingForm(@PathVariable Long writingId, Model model) {
-        Writing writing = boardService.findOne(writingId);
-        model.addAttribute("writingForm", new WritingForm());
-        model.addAttribute("writing", writing);
-        return "board/writingModifyForm";
+    @GetMapping("/{postId}/modify")
+    public String modifyPostForm(@PathVariable Long postId, Model model) {
+        Post post = boardService.findOne(postId);
+        model.addAttribute("postForm", new PostForm());
+        model.addAttribute("post", post);
+        return "board/postModifyForm";
     }
 
-    @PostMapping("/{writingId}/modify")
-    public String modifyWriting(@PathVariable Long writingId, @Valid WritingForm form, BindingResult result) {
+    @PostMapping("/{postId}/modify")
+    public String modifyPost(@PathVariable Long postId, @Valid PostForm form, BindingResult result) {
         if (result.hasErrors()) {
-            return "board/writingModifyForm";
+            return "board/postModifyForm";
         }
 
-        Writing writing = boardService.findOne(writingId);
-        writing.setHeader(form.getHeader());
-        writing.setContent(form.getContent());
-        writing.setCategory(form.getCategory());
-        writing.setLastModifiedTime(getNowLocalDateTimeFormat(LocalDateTime.now()));
-        boardService.modify(writing);
-        log.info("here");
+        Post post = boardService.findOne(postId);
 
-        return "redirect:/board/{writingId}";
+        Post postParam = Post.builder()
+                .id(post.getId())
+                .content(form.getContent())
+                .title(form.getTitle())
+                .category(form.getCategory())
+                .createdTime(post.getCreatedTime())
+                .lastModifiedTime(getNowLocalDateTimeFormat(LocalDateTime.now()))
+                .member(post.getMember())
+                .build();
+
+        boardService.modify(postParam);
+
+        return "redirect:/board/{postId}";
     }
 
-    @GetMapping("/{writingId}")
-    public String viewWriting(@PathVariable Long writingId, Model model) {
-        Writing writing = boardService.findOne(writingId);
-        writing.setViewCount(writing.getViewCount()+1);
-        boardService.modify(writing);
-        model.addAttribute("writing", writing);
+    @GetMapping("/{postId}")
+    public String viewPost(@PathVariable Long postId, Model model) {
+        Post post = boardService.findOne(postId);
+        post.increaseViewCount();
+        boardService.modify(post);
+        model.addAttribute("post", post);
 
-        List<Comment> comments = commentService.findAllCommentsofWriting(writing);
-        model.addAttribute("comments", comments);
+        model.addAttribute("comments", post.getComments());
         model.addAttribute("commentForm", new CommentForm());
-        return "board/viewWriting";
+        return "board/viewPost";
     }
 
-    @PostMapping("/{writingId}")
-    public String createComment(@PathVariable Long writingId, @Valid CommentForm form, BindingResult result) {
+    @PostMapping("/{postId}")
+    public String createComment(@PathVariable Long postId, @Valid CommentForm form, BindingResult result) {
         if (result.hasErrors()) {
-            return "redirect:/board/{writingId}";
+            return "redirect:/board/{postId}";
         }
 
-        Writing writing = boardService.findOne(writingId);
-        Comment comment = createComment(writing, form);
+        Post post = boardService.findOne(postId);
+        Comment comment = createComment(post, form);
         commentService.write(comment);
 
-        return "redirect:/board/{writingId}";
+        return "redirect:/board/{postId}";
     }
 
-    @GetMapping("/{writingId}/delete")
-    public String deleteWriting(@PathVariable Long writingId) {
-        Writing writing = boardService.findOne(writingId);
-        boardService.delete(writing);
+    @GetMapping("/{postId}/delete")
+    public String deletePost(@PathVariable Long postId) {
+        Post post = boardService.findOne(postId);
+        boardService.delete(post);
 
-        List<Comment> comments = commentService.findAllCommentsofWriting(writing);
-        for (Comment comment : comments) {
+        for (Comment comment : post.getComments()) {
             commentService.delete(comment);
         }
 
         return "redirect:/board";
     }
 
-    @GetMapping("/{writingId}/comment/{commentId}/delete")
-    public String deleteComment(@PathVariable Long writingId, @PathVariable Long commentId) {
+    @GetMapping("/{postId}/comment/{commentId}/delete")
+    public String deleteComment(@PathVariable Long postId, @PathVariable Long commentId) {
         Comment comment = commentService.findOne(commentId);
         commentService.delete(comment);
-        return "redirect:/board/{writingId}";
+        return "redirect:/board/{postId}";
     }
 
-    public Writing createWriting(WritingForm form) {
-        Writing writing = new Writing();
-        writing.setContent(form.getContent());
-        writing.setHeader(form.getHeader());
-        writing.setCategory(form.getCategory());
+    public Post createPost(PostForm form) {
         String nowString = getNowLocalDateTimeFormat(LocalDateTime.now());
-        writing.setCreatedTime(nowString);
-        writing.setLastModifiedTime(nowString);
-        writing.setMember(memberService.find(1L));
 
-        return writing;
+        Post post = Post.builder()
+                .content(form.getContent())
+                .title(form.getTitle())
+                .category(form.getCategory())
+                .createdTime(nowString)
+                .lastModifiedTime(nowString)
+                .member(memberService.find(1L))
+                .build();
+
+        return post;
     }
 
-    public Comment createComment(Writing writing, CommentForm form) {
+    public Comment createComment(Post post, CommentForm form) {
         Comment comment = new Comment();
         comment.setContent(form.getContent());
         String nowString = getNowLocalDateTimeFormat(LocalDateTime.now());
         comment.setCreatedTime(nowString);
         comment.setLastModifiedTime(nowString);
         comment.setMember(memberService.find(1L));
-        comment.setWriting(writing);
+        post.addComment(comment);
 
         return comment;
     }

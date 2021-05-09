@@ -6,12 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.Repository.BoardRepository;
-import spring.board.domain.Category;
-import spring.board.domain.Writing;
-
-import java.time.LocalDateTime;
-
-import static org.junit.jupiter.api.Assertions.*;
+import spring.board.domain.Post;
 
 @SpringBootTest
 @Transactional
@@ -23,28 +18,30 @@ class BoardServiceTest {
     @Test
     void 글쓰기() {
         //given
-        Writing writing = new Writing();
-        writing.setHeader("테스트");
-        writing.setContent("이것은 테스트입니다.");
+        Post post = Post.builder()
+                .title("테스트")
+                .content("이것은 테스트입니다.")
+                .build();
 
         //when
-        Long id = boardService.write(writing);
+        Long id = boardService.write(post);
 
         //then
-        Assertions.assertThat(writing).isEqualTo(boardRepository.findOne(id));
+        Assertions.assertThat(post).isEqualTo(boardRepository.findOne(id));
     }
 
     @Test
     void 글수정() {
         //given
-        Writing writing = new Writing();
-        writing.setHeader("테스트");
-        writing.setContent("이것은 테스트입니다.");
-        Long id = boardService.write(writing);
+        Post post = Post.builder()
+                .title("테스트")
+                .content("이것은 테스트입니다.")
+                .build();
+        Long id = boardService.write(post);
 
         //when
-        writing.setContent("변경된 내용입니다.");
-        boardService.modify(writing);
+        post.setContent("변경된 내용입니다.");
+        boardService.modify(post);
 
         //then
         Assertions.assertThat(boardRepository.findOne((id)).getContent()).isEqualTo("변경된 내용입니다.");
@@ -53,15 +50,17 @@ class BoardServiceTest {
     @Test
     void 글삭제() {
         //given
-        Writing writing = new Writing();
-        writing.setHeader("테스트");
-        writing.setContent("이것은 테스트입니다.");
-        Long id = boardService.write(writing);
+        Post post = Post.builder()
+                .title("테스트")
+                .content("이것은 테스트입니다.")
+                .build();
 
-        Writing findWriting = boardRepository.findOne((id));
+        Long id = boardService.write(post);
+
+        Post findPost = boardRepository.findOne((id));
 
         //when
-        boardService.delete(findWriting);
+        boardService.delete(findPost);
 
         //then
         Assertions.assertThat(boardRepository.findOne(id)).isNull();

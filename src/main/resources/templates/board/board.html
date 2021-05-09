@@ -17,13 +17,13 @@
             </tr>
             </thead>
             <tbody>
-                <tr th:each="writing : ${writings}">
-                    <td th:text="${writing.id}"></td>
-                    <td th:text="${writing.category}"></td>
-                    <td><a href="viewWriting.html" th:href="@{/board/{writingId}(writingId=${writing.id})}" th:text="${writing.header}">header</a></td>
-                    <td th:text="${writing.member.name}"></td>
-                    <td th:text="${writing.lastModifiedTime}"></td>
-                    <td th:text="${writing.viewCount}"></td>
+                <tr th:each="post : ${posts}">
+                    <td th:text="${post.id}"></td>
+                    <td th:text="${post.category}"></td>
+                    <td><a href="viewPost.html" th:href="@{/board/{postId}(postId=${post.id})}" th:text="${post.title}"></a></td>
+                    <td th:text="${post.member.name}"></td>
+                    <td th:text="${post.lastModifiedTime}"></td>
+                    <td th:text="${post.viewCount}"></td>
                 </tr>
             </tbody>
         </table>

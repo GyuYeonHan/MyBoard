@@ -7,10 +7,10 @@ import spring.board.domain.Category;
 import javax.validation.constraints.NotEmpty;
 
 @Getter @Setter
-public class WritingForm {
+public class PostForm {
 
     @NotEmpty(message = "제목을 입력해주세요.")
-    private String header;
+    private String title;
 
     @NotEmpty(message = "내용을 입력해주세요.")
     private String content;

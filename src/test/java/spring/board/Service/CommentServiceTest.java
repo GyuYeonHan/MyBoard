@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import spring.board.Repository.CommentRepository;
 import spring.board.domain.Comment;
-import spring.board.domain.Writing;
+import spring.board.domain.Post;
 
 @SpringBootTest
 @Transactional
@@ -19,10 +19,14 @@ class CommentServiceTest {
     @Test
     public void 댓글작성() {
         //given
-        Writing writing = new Writing();
+        Post post = Post.builder()
+                .title("테스트")
+                .content("이것은 테스트입니다.")
+                .build();
+
         Comment comment = new Comment();
         comment.setContent("테스트 댓글입니다.");
-        comment.setWriting(writing);
+        comment.setPost(post);
 
         //when
         Long id = commentService.write(comment);
@@ -34,10 +38,14 @@ class CommentServiceTest {
     @Test
     public void 댓글수정() {
         //given
-        Writing writing = new Writing();
+        Post post = Post.builder()
+                .title("테스트")
+                .content("이것은 테스트입니다.")
+                .build();
+
         Comment comment = new Comment();
         comment.setContent("테스트 댓글입니다.");
-        comment.setWriting(writing);
+        comment.setPost(post);
         Long id = commentService.write(comment);
 
         //when
@@ -52,10 +60,14 @@ class CommentServiceTest {
     @Test
     public void 댓글삭제() {
         //given
-        Writing writing = new Writing();
+        Post post = Post.builder()
+                .title("테스트")
+                .content("이것은 테스트입니다.")
+                .build();
+
         Comment comment = new Comment();
         comment.setContent("테스트 댓글입니다.");
-        comment.setWriting(writing);
+        comment.setPost(post);
         Long id = commentService.write(comment);
 
         //when

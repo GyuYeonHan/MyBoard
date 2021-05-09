@@ -1,7 +1,7 @@
 package spring.board.Repository;
 
 import org.springframework.stereotype.Repository;
-import spring.board.domain.Writing;
+import spring.board.domain.Post;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,30 +13,30 @@ public class BoardRepository {
     @PersistenceContext
     private EntityManager em;
 
-    public void save(Writing writing) {
-        if (writing.getId() == null) {
-            em.persist(writing);
+    public void save(Post post) {
+        if (post.getId() == null) {
+            em.persist(post);
         } else {
-            em.merge(writing);
+            em.merge(post);
         }
     }
 
-    public Writing findOne(Long id) {
-        return em.find(Writing.class, id);
+    public Post findOne(Long id) {
+        return em.find(Post.class, id);
     }
 
-    public List<Writing> findAll() {
-        return em.createQuery("select w from Writing w", Writing.class)
+    public List<Post> findAll() {
+        return em.createQuery("select p from Post p", Post.class)
                 .getResultList();
     }
 
-    public List<Writing> findByName(String name) {
-        return em.createQuery("select w from Writing w where w.member.name = :name", Writing.class)
+    public List<Post> findByName(String name) {
+        return em.createQuery("select p from Post p where p.member.name = :name", Post.class)
                 .setParameter("name", name)
                 .getResultList();
     }
 
-    public void delete(Writing writing) {
-        em.remove(writing);
+    public void delete(Post post) {
+        em.remove(post);
     }
 }
