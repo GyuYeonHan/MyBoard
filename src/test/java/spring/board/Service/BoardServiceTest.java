@@ -24,8 +24,6 @@ class BoardServiceTest {
     void 글쓰기() {
         //given
         Writing writing = new Writing();
-        writing.setCategory(Category.ETC);
-        writing.setCreatedTime(LocalDateTime.now());
         writing.setHeader("테스트");
         writing.setContent("이것은 테스트입니다.");
 
@@ -40,8 +38,6 @@ class BoardServiceTest {
     void 글수정() {
         //given
         Writing writing = new Writing();
-        writing.setCategory(Category.ETC);
-        writing.setCreatedTime(LocalDateTime.now());
         writing.setHeader("테스트");
         writing.setContent("이것은 테스트입니다.");
         Long id = boardService.write(writing);
@@ -58,8 +54,6 @@ class BoardServiceTest {
     void 글삭제() {
         //given
         Writing writing = new Writing();
-        writing.setCategory(Category.ETC);
-        writing.setCreatedTime(LocalDateTime.now());
         writing.setHeader("테스트");
         writing.setContent("이것은 테스트입니다.");
         Long id = boardService.write(writing);
