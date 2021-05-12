@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,10 +29,10 @@ public class Post extends BaseTimeEntity {
     private Member member;
 
     @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
+    private final List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Post(String createdTime, String modifiedTime, Long id, String title, String content, int viewCount, Category category, Member member, List<Comment> comments) {
+    public Post(String createdTime, String modifiedTime, Long id, String title, String content, int viewCount, Category category, Member member) {
         super(createdTime, modifiedTime);
         this.id = id;
         this.title = title;
@@ -39,7 +40,6 @@ public class Post extends BaseTimeEntity {
         this.viewCount = viewCount;
         this.category = category;
         this.member = member;
-        this.comments = comments;
     }
 
     protected Post() {

@@ -56,7 +56,6 @@ class BoardServiceTest {
                 .build();
 
         Long id = boardService.write(post);
-
         Post findPost = boardRepository.findOne((id));
 
         //when

@@ -76,6 +76,7 @@ public class BoardController {
                 .createdTime(post.getCreatedTime())
                 .modifiedTime(getNowLocalDateTimeFormat(LocalDateTime.now()))
                 .member(post.getMember())
+                .viewCount(post.getViewCount())
                 .build();
 
         boardService.modify(postParam);
@@ -112,10 +113,6 @@ public class BoardController {
     public String deletePost(@PathVariable Long postId) {
         Post post = boardService.findOne(postId);
         boardService.delete(post);
-
-        for (Comment comment : post.getComments()) {
-            commentService.delete(comment);
-        }
 
         return "redirect:/board";
     }
