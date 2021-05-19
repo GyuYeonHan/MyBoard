@@ -14,7 +14,8 @@
     </button>
     <div class="container-fluid">
         <dl>
-            <dt th:text="${post.title}"></dt>
+            <dt class="header" th:text="${post.title}"></dt>
+            <hr>
             <dd th:text="${post.content}"></dd>
         </dl>
     </div>
@@ -52,7 +53,7 @@
             </tbody>
         </table>
     </div>
-    <footer th:replace="fragments/footer :: footer"/>
 </div>
+<footer th:replace="fragments/footer :: footer"/>
 </body>
 </html>

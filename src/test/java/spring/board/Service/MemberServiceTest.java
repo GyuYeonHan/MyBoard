@@ -20,14 +20,27 @@ class MemberServiceTest {
     @Test
     public void 회원가입() {
         //given
-        Member member = new Member();
-        member.setName("userA");
+        Member member = Member.builder().username("UserA").password("1234").build();
 
         //when
         Long id = memberService.join(member);
 
         //then
         Assertions.assertThat(member).isEqualTo(memberRepository.findOne(id));
+    }
+
+    @Test
+    public void 회원조회() {
+        //given
+        Member member = Member.builder().username("UserA").password("1234").build();
+        Long id = memberService.join(member);
+
+        //when
+        Member findMember = memberService.findOne(id);
+
+        //then
+        Assertions.assertThat(member.getUsername()).isEqualTo(findMember.getUsername());
+
     }
 
 }

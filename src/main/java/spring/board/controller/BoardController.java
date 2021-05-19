@@ -133,7 +133,7 @@ public class BoardController {
                 .category(form.getCategory())
                 .createdTime(nowString)
                 .modifiedTime(nowString)
-                .member(memberService.find(1L))
+                .member(memberService.findOne(100L))
                 .build();
 
         return post;
@@ -145,7 +145,7 @@ public class BoardController {
                 .content(form.getContent())
                 .createdTime(nowString)
                 .modifiedTime(nowString)
-                .member(memberService.find(1L))
+                .member(memberService.findOne(100L))
                 .build();
         post.addComment(comment);
 

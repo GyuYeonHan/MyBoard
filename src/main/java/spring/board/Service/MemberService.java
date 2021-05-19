@@ -22,7 +22,7 @@ public class MemberService {
         return member.getId();
     }
 
-    public Member find(Long id) {
+    public Member findOne(Long id) {
         return memberRepository.findOne(id);
     }
 }

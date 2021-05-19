@@ -17,18 +17,19 @@
             </tr>
             </thead>
             <tbody>
-                <tr th:each="post : ${posts}">
-                    <td th:text="${post.id}"></td>
-                    <td th:text="${post.category}"></td>
-                    <td><a href="viewPost.html" th:href="@{/board/{postId}(postId=${post.id})}" th:text="${post.title}"></a></td>
-                    <td th:text="${post.member.name}"></td>
-                    <td th:text="${post.modifiedTime}"></td>
-                    <td th:text="${post.viewCount}"></td>
-                </tr>
+            <tr th:each="post : ${posts}">
+                <td th:text="${post.id}"></td>
+                <td th:text="${post.category}"></td>
+                <td><a href="viewPost.html" th:href="@{/board/{postId}(postId=${post.id})}" th:text="${post.title}"></a>
+                </td>
+                <td th:text="${post.member.name}"></td>
+                <td th:text="${post.modifiedTime}"></td>
+                <td th:text="${post.viewCount}"></td>
+            </tr>
             </tbody>
         </table>
     </div>
-    <nav>
+    <nav class="text-center">
         <ul class="pagination">
             <li>
                 <a href="#" aria-label="Previous">
@@ -47,9 +48,13 @@
             </li>
         </ul>
     </nav>
-    <a class="btn btn-default" href="/board/create">글쓰기</a>
-    <input>
-    <a class="btn btn-default" href="/board/create">검색</a>
+    <div>
+        <a class="btn text-left" style="display: inline" href="/board/create">글쓰기</a>
+        <div class="text-right">
+            <input>
+            <a class="btn btn-default" href="/board/create">검색</a>
+        </div>
+    </div>
 
     <div th:replace="fragments/footer :: footer"/>
 </div>
